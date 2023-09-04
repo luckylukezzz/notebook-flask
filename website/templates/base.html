@@ -17,12 +17,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <div class="navbar-nav">
+                {% if first_name %}
+                <a class="navbar-item nav-link" id="home" href="/home">Home</a>
+                <a class="navbar-item nav-link" id="logout" href=" /logout">logout</a>
+                
+                {% else %}
                 <a class="navbar-item nav-link" id="login" href=" /login">login</a>
                 <a class="navbar-item nav-link" id="signUp" href=" /sign-up">Sign up</a>
-                <a class="navbar-item nav-link" id="logout" href=" /logout">logout</a>
-                <a class="navbar-item nav-link" id="home" href="/">Home</a>
-
-
+               
+                {% endif %}
             </div>
         </div>
     </nav>

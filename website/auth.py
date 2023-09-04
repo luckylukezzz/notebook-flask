@@ -1,4 +1,5 @@
-from flask import Blueprint,render_template,request ,redirect,url_for, flash
+from flask import Blueprint,render_template,request ,redirect,url_for, flash,session
+from werkzeug.security import generate_password_hash,check_password_hash
 from . import mysql
 
 auth = Blueprint('auth',__name__)   
@@ -17,11 +18,16 @@ def login():
         if not existing_user:
             flash('Theres no registered users in this email address. try again', category='error')
         else:
-            if existing_user[2] != password :
+            if not check_password_hash(existing_user[2],password) :
                  flash('Incorrect password. try again',category='error')
             else:
+                session['logged_in'] = True
+                session["id"] = existing_user[0]
+                session['first_name'] = existing_user[3]
                 flash('Login success!',category='success')
-                return redirect(url_for('auth.logout'))
+                
+                
+                return redirect(url_for('views.home'))
 
 
     return render_template('login.html')
@@ -29,7 +35,10 @@ def login():
 
 @auth.route('/logout')
 def logout():
-    return "<p>Logout</p>"
+    session.pop('logged_in', None)
+    session.pop('first_name', None)
+    session.pop('id', None)
+    return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up',methods=['POST','GET'])
 def signUp():
@@ -59,7 +68,7 @@ def signUp():
             else:
                 cursor.execute(
                     "INSERT INTO user (email, first_name, password) VALUES (%s, %s, %s)",
-                    (email, firstName, password1)
+                    (email, firstName, generate_password_hash(password1, method="sha256"))
                 )
                 mysql.connection.commit()
                 cursor.close()
