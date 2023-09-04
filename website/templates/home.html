@@ -6,8 +6,8 @@ Home{% endblock %}
 <ul class="list-group list-group-flush" id="notes">
     {% for id,data in allnotes %}
     <li class="list-group-item">
-        {{ data }}
-        <button type="button" class="close" >
+        {{ data}}
+        <button type="button" class="close" onClick="deleteNote({{ id }})" >
             <span aria-hidden="true">&times;</span>
         </button>
     </li>
