@@ -4,7 +4,7 @@ from . import mysql
 
 auth = Blueprint('auth',__name__)   
 
-@auth.route('/login', methods=['POST','GET'])
+@auth.route('/', methods=['POST','GET'])
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
